@@ -5,25 +5,41 @@ public abstract class CoinChanger {
     abstract public int minCoins(int amount, Set<Integer> denominations);
 
     private static void checkArguments(int amount, Set<Integer> denominations) {
-        // TODO: Do all of your checks here, according to the lab instructions.
-        // Anything wrong? Throw an IllegalArgumentException.
-        //
-        // Error situations and messages are:
-        //   "Amount must be at least 1"
-        //   "At least one denomination is required"
-        //   "Denominations must all be positive"
-        //   "Denominations must have a 1-unit coin"
+
+      if (amount < 1)
+          throw new IllegalArgumentException("Amount must be at least 1");
+
+      if (denominations.isEmpty())
+          throw new IllegalArgumentException("At least one denomination is required");
+
+      if (!(denominations.contains(1)))
+          throw new IllegalArgumentException("Denominations must have a 1-unit coin");
+
+      var all_Pos = true;
+      for (var i:denominations){
+        if (i <= 0){
+          all_Pos = false;
+          throw new IllegalArgumentException("Denominations must all be positive");
+
+        }
+      }
+
     }
 
     public static class TopDown extends CoinChanger {
         public int minCoins(int amount, Set<Integer> denominations) {
             checkArguments(amount, denominations);
 
-            // TODO: Do the top-down-with-memoization algorithm here. You should
-            // do this recursively, so write a separate, private, recursive,
-            // "helper" method. This method here will call that recursive
-            // method with the memo object and the initial amount.
-            return 0; // TODO change this line, of course
+            if (amount == 0)
+              return 1;
+
+            if (amount < 0)
+              return 0;
+
+            //if ()
+
+
+            return 0;
         }
     }
 
@@ -31,9 +47,25 @@ public abstract class CoinChanger {
         public int minCoins(int amount, Set<Integer> denominations) {
             checkArguments(amount, denominations);
 
-            // TODO: Implement this method using the bottom-up approach with
-            // a table.
-            return 0; // TODO change this line, of course
+            var table = new int[amount+1];
+            table[0] = 0;
+
+            for (var i = 0; i < table.length; i++) {
+
+              table[i] = Integer.MAX_VALUE;
+              for (var d: denominations) {
+
+                if (d <= i){
+
+                  table[i] = Math.min(table[i], table[i-d]+1);
+                }
+              }
+            }
+
+
+
+            return table[amount];
+
         }
     }
 }
