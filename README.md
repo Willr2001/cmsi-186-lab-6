@@ -2,6 +2,8 @@
 
 Read.me
 
+This lab was quite the eye opener into deeper Java classes and functions.
+
 
 '        '        ---------
 '        '            '
