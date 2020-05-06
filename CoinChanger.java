@@ -22,9 +22,7 @@ public abstract class CoinChanger {
           throw new IllegalArgumentException("Denominations must all be positive");
 
         }
-      }
-
-      
+      }    
 
     }
 
