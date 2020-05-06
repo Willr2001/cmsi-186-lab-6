@@ -24,22 +24,51 @@ public abstract class CoinChanger {
         }
       }
 
+      
+
     }
+
 
     public static class TopDown extends CoinChanger {
         public int minCoins(int amount, Set<Integer> denominations) {
             checkArguments(amount, denominations);
+            int[] denomination = new int[denominations.size()];
+            int index = 0;
+            for (Iterator<Integer> it = denominations.iterator(); it.hasNext(); ) {
+              Integer f = it.next();
+              denomination[index] = f.intValue();
+              index++;
+            }
+            int[] memo = new int[amount + 1];
+            return minCoins(amount, denomination, memo);
+        }
 
-            if (amount == 0)
-              return 1;
 
-            if (amount < 0)
-              return 0;
-
-            //if ()
-
-
+        public int minCoins(int amount, int[] coins, int[] memo){
+          if (amount < 0) {
+            return -1;
+          }
+          if (memo[amount] != 0) {
+            return memo[amount];
+          }
+          if (amount == 0) {
             return 0;
+          }
+
+
+          int val = Integer.MAX_VALUE;
+          for (int coin: coins) {
+
+            if (amount - coin < 0){
+              continue;
+            }
+            memo[amount - coin] = minCoins(amount - coin, coins, memo);
+            if (memo[amount - coin] >= 0 && 1 + memo[amount - coin] < val) {
+              val = memo[amount - coin] + 1;
+            }
+          }
+          memo[amount] = val != Integer.MAX_VALUE ? val : -1;
+          return memo[amount];
         }
     }
 
